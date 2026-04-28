@@ -13,8 +13,6 @@
 #include "isNumber.hpp"
 #include "ioHandle.hpp"
 
-const std::string ERROR_NOT_ENOUGH_FIGURES = "ERROR: Not enough figures to count average\n";
-
 void handleArea(std::istringstream &args, const std::vector<Polygon> &figures) {
 
     std::string arg = "";
@@ -36,7 +34,7 @@ void handleArea(std::istringstream &args, const std::vector<Polygon> &figures) {
     else if (arg == "MEAN") {
 
         if (figures.empty()) {
-            std::cerr << ERROR_NOT_ENOUGH_FIGURES;
+            std::cout << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -47,6 +45,11 @@ void handleArea(std::istringstream &args, const std::vector<Polygon> &figures) {
     else if (isNumber(arg)) {
 
         size_t nVertexes = static_cast<size_t>(std::stod(arg));
+
+        if (nVertexes < 3) {
+            std::cout << "<INVALID COMMAND>\n";
+            return;
+        }
 
         operation = [nVertexes](const double sum, const Polygon &polygon) {
             return (polygon.points.size() == nVertexes
@@ -79,10 +82,7 @@ void handleMax(std::istringstream &args, const std::vector<Polygon> &figures) {
     if (arg == "AREA") {
 
         if (figures.empty()) {
-            {
-                iofmtguard guard(std::cout);
-                std::cout << std::fixed << std::setprecision(1) << 0.0 << '\n';
-            }
+            std::cout << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -101,7 +101,7 @@ void handleMax(std::istringstream &args, const std::vector<Polygon> &figures) {
     else if (arg == "VERTEXES") {
 
         if (figures.empty()) {
-            std::cout << 0 << '\n';
+            std::cout << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -129,10 +129,7 @@ void handleMin(std::istringstream &args, const std::vector<Polygon> &figures) {
     if (arg == "AREA") {
 
         if (figures.empty()) {
-            {
-                iofmtguard guard(std::cout);
-                std::cout << std::fixed << std::setprecision(1) << 0.0 << '\n';
-            }
+            std::cout << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -151,7 +148,7 @@ void handleMin(std::istringstream &args, const std::vector<Polygon> &figures) {
     else if (arg == "VERTEXES") {
 
         if (figures.empty()) {
-            std::cout << 0 << '\n';
+            std::cout << "<INVALID COMMAND>\n";
             return;
         }
 
@@ -191,6 +188,11 @@ void handleCount(std::istringstream &args, const std::vector<Polygon> &figures) 
     else if (isNumber(arg)) {
 
         size_t nVertexes = static_cast<size_t>(std::stod(arg));
+
+        if (nVertexes < 3) {
+            std::cout << "<INVALID COMMAND>\n";
+            return;
+        }
 
         operation = [nVertexes](const size_t num, const Polygon &polygon) {
             return (polygon.points.size()  == nVertexes ? num + 1 : num);
@@ -260,8 +262,16 @@ void handleInFrame(std::istringstream &args, std::vector<Polygon> &figures) {
     }
 
     if (figures.empty() || arg.points.size() < 3) {
-        std::cout << "<FALSE>\n";
+        std::cout << "<INVALID COMMAND>\n";
         return;
+    }
+
+    {
+        std::string extra = "";
+        if (args >> extra) {
+            std::cout << "<INVALID COMMAND>\n";
+            return;
+        }
     }
 
     // MaxX MaxY MinX MinY

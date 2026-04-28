@@ -53,7 +53,7 @@ std::istream &operator>>(std::istream &in, Polygon &p) {
 
     size_t nPoints = 0;
 
-    if (!(in >> nPoints)) {
+    if (!(in >> nPoints) || nPoints < 3) {
         return in;
     }
 
