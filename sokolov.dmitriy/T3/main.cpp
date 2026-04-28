@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <limits>
+#include <iterator>
 #include "commandHandlers.hpp"
 #include "ioHandle.hpp"
 #include "polygon.hpp"

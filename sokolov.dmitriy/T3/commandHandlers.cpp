@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <limits>
 #include "commandHandlers.hpp"
 #include "polygon.hpp"
 #include "iofmtguard.hpp"
