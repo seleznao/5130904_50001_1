@@ -2,7 +2,7 @@
 #include <string>
 
 bool isNumber(const std::string &str) {
-    
+
     if (str.empty()) {
         return false;
     }
