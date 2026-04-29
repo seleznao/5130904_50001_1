@@ -11,12 +11,15 @@
 #include <iomanip>
 #include <cctype>
 #include <iterator>
+#include <climits>
 
 using namespace std;
 using namespace std::placeholders;
 
 struct Point {
     int x, y;
+
+    Point() : x(0), y(0) {}
 
     bool operator==(const Point& other) const {
         return x == other.x && y == other.y;
@@ -33,23 +36,24 @@ ostream& operator<<(ostream& os, const Point& p) {
 }
 
 istream& operator>>(istream& is, Point& p) {
-    char ch;
-    is >> ch;
-    if (ch != '(') {
+    char ch1, ch2, ch3;
+    int x, y;
+
+    is >> ch1;
+    if (ch1 != '(') {
         is.setstate(ios::failbit);
         return is;
     }
-    is >> p.x;
-    is >> ch;
-    if (ch != ';') {
+
+    is >> x >> ch2 >> y >> ch3;
+
+    if (ch2 != ';' || ch3 != ')') {
         is.setstate(ios::failbit);
         return is;
     }
-    is >> p.y;
-    is >> ch;
-    if (ch != ')') {
-        is.setstate(ios::failbit);
-    }
+
+    p.x = x;
+    p.y = y;
     return is;
 }
 
@@ -128,7 +132,7 @@ struct Polygon {
                 double xIntersect = static_cast<double>(p1.x) +
                     static_cast<double>(p.y - p1.y) * static_cast<double>(p2.x - p1.x) /
                     static_cast<double>(p2.y - p1.y);
-                if (xIntersect >= p.x) {
+                if (xIntersect >= static_cast<double>(p.x)) {
                     intersections++;
                 }
             }
@@ -257,7 +261,7 @@ void processArea(const vector<string>& tokens) {
             bind(getArea, _1));
 
         double sum = accumulate(areas.begin(), areas.end(), 0.0);
-        double mean = sum / polygons.size();
+        double mean = sum / static_cast<double>(polygons.size());
         cout << fixed << setprecision(1) << mean << endl;
     }
     else {
@@ -400,8 +404,7 @@ void processIntersections(const vector<string>& tokens) {
 
         Polygon query;
         for (int i = 0; i < vertexCount; ++i) {
-            string pointStr = tokens[2 + i * 2] + " " + tokens[3 + i * 2];
-            stringstream ss(pointStr);
+            stringstream ss(tokens[2 + i * 2] + " " + tokens[3 + i * 2]);
             Point p;
             ss >> p;
             if (ss.fail()) {
