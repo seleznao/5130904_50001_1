@@ -450,11 +450,11 @@ void readPolygons(const string& filename) {
             poly.points.push_back(p);
         }
 
-        if (!valid || poly.points.size() != static_cast<size_t>(vertexCount)) {
-            continue;
+        string remaining;
+        ss >> remaining;
+        if (valid && remaining.empty() && poly.points.size() == static_cast<size_t>(vertexCount)) {
+            polygons.push_back(poly);
         }
-
-        polygons.push_back(poly);
     }
 }
 
